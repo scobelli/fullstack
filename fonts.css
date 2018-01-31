@@ -1,0 +1,30 @@
+.font_oswald {
+   font-family: 'Oswald', serif;
+}
+
+.font_titillium{
+   font-family: 'Titillium Web', serif;
+}
+
+.font_dosis {
+   font-family: 'Dosis', serif;
+}
+
+.font_bitter {
+   font-family: 'Bitter', serif;
+}
+
+#dosis {
+  text-align: center;
+}
+#bitter {
+
+  font-weight: bold;
+}
+#oswald {
+  font-style: italic;
+}
+
+#titillium {
+  text-shadow: 2px 2px #ff0000;
+}
