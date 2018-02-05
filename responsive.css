@@ -1,0 +1,52 @@
+
+.flex_container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.project {
+  width: 100%;
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+#project_1 {
+  text-align: left;
+}
+#project_2 {
+  text-align: left;
+}
+#project_3 {
+  text-align: left;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .project {
+    width: 50%;
+  }
+  #project_1 {
+    text-align: left;
+  }
+  #project_2 {
+    text-align: right;
+  }
+  #project_3 {
+    text-align: center;
+    width: 100%
+  }
+}
+
+@media (min-width: 992px) {
+  .project {
+    width: 33%;
+  }
+  #project_1 {
+    text-align: left;
+  }
+  #project_2 {
+    text-align: center;
+  }
+  #project_3 {
+    text-align: right;
+  }
+}

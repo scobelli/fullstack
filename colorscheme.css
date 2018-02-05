@@ -26,18 +26,19 @@ header {
   color: #D28CAF;
   text-align: center;
 }
-section {
+
+article {
   background-color: #D28CAF;
   color: #460024;
-}
-
-.subtitle {
-  text-align: center;
 }
 
 /*section {
   background-color: #69113E
 }*/
+
+.project {
+  border-color: #460024
+}
 
 h1, h2, h3, h4 {
   font-family: 'Dosis', serif;
@@ -48,9 +49,13 @@ p {
 }
 
 a {
-  color: #69113E
+  color: #69113E;
 }
 
 a:visited {
-  color: #8C2F5E
+  color: #8C2F5E;
+}
+
+.bordered-box {
+  border-color: #460024;
 }
