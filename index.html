@@ -7,13 +7,7 @@
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Oswald">
   <link rel="stylesheet"
-        href="colorscheme.css">
-  <link rel="stylesheet"
-        href="fonts.css">
-  <link rel="stylesheet"
-        href="responsive.css">
-  <link rel="stylesheet"
-        href="style.css">
+        href="./css/style.css">
 
 
 </head>
@@ -21,42 +15,80 @@
   <header>
     <h1>Web Portfolio</h1>
   </header>
-  <div class="subtitle">
-    <h2>Welcome!</h2>
-    <figure class="portrait" >
-      <img src="stef.png" alt="me!">
-    </figure>
-    <article id="about_me">
-      <h2>Stefano Cobelli</h2>
-      <p>Hi everybody! I am a senior at Bucknell University studying Computer Science and Engineering. I'm from a small town in Connecticut and I am looking for a career in software engineering. This page dedicated to my work done in my Full Stack class I am taking in Spring 2018. You can also find my <a href="https://github.com/scobelli">github here</a>. If you wish to contact me, you can reach me at <a href="mailto:sjc032@bucknell.edu">sjc032@bucknell.edu</a>. Thanks for stopping by and I hope you enjoy!</p>
-    </article>
-  </div>
-  <div id=course_work>
-    <article id="about_class" class="bordered-box">
-      <h2>CSCI 379</h2>
-      <p>This course gives an introduction to developing modern web applications covering the full web stack from implementing server-side logic and databases, application frameworks, HTML5/CSS3/JS, and a little bit of UI/UX design.</p>
-    </article>
-    <article id="about_class" class="bordered-box">
-    <h2>Sampled Coursework<h2>
-    <p><a href="./fontfun.html">Font Fun!</a></p>
-    </article>
-    <article>
-      <h2>Projects</h2>
-      <div class="flex_container">
-        <div  class="project" id="project_1">
-            <h3>Project 1<h3>
-            <p>Coming Soon</p>
-        </div>
-        <div class="project" id="project_2">
-            <h3>Project 2<h3>
-            <p>Coming Soon</p>
-        </div>
-        <div class="project" id="project_3">
-            <h3>Project 3<h3>
-            <p>Coming Soon</p>
-        </div>
+  <section>
+    <article class="flex_container">
+      <div id="about_me">
+        <h2>Stefano Cobelli</h2>
+        <p>Hi everybody! I am a senior at Bucknell University studying Computer Science and Engineering. I'm from a small town in Connecticut and I am looking for a career in software engineering. This page dedicated to my work done in my Full Stack class I am taking in Spring 2018. You can also find my <a href="https://github.com/scobelli">github here</a>. If you wish to contact me, you can reach me at <a href="mailto:sjc032@bucknell.edu">sjc032@bucknell.edu</a>. Thanks for stopping by and I hope you enjoy!</p>
+      </div>
+      <div class="portrait">
+        <img id="mug" src="stef.png" alt="me!">
       </div>
     </article>
+  </section>
+  <div id=course_work>
+    <section id="about_class">
+      <h2>CSCI 379</h2>
+      <p>This course gives an introduction to developing modern web applications covering the full web stack from implementing server-side logic and databases, application frameworks, HTML5/CSS3/JS, and a little bit of UI/UX design.</p>
+    </section>
+    <section>
+      <h2>Sampled Coursework</h2>
+      <p><a href="./fontfun.html">Font Fun!</a></p>
+    </section>
+  </div>
+  <header>
+    <h1>Projects</h1>
+  </header>
+  <div class="flex_container">
+    <div  class="project flex_item " id="project_1">
+      <h3 style="background-color:green">Project 1</h3>
+      <p>Look at this photograph
+Every time I do it makes me laugh
+How did our eyes get so red?
+And what the hell is on Joey's head?
+This is where I grew up
+I think the present owner fixed it up
+I never knew we ever went without
+The second floor is hard for sneakin' out
+And this is where I went to school
+Most of the time I had better things to do
+Criminal record says I broke in twice
+I must of done it half a dozen times</p>
+    </div>
+    <div class="project flex_item" id="project_2">
+      <h3 style="background-color:blue">Project 2</h3>
+      <p>I wonder if it's too late
+Should I go back and try to graduate?
+Lot's better now than it was back then
+If I was them, I wouldn't let me in
+Oh, whoa, whoa, whoa, God, I
+Every memory of lookin' out the back door
+I have the photo album spread out on my bedroom floor
+It's hard to say it
+Time to say it
+Good bye, good bye
+Every memory of walkin' out the front door
+I found the photo of the friend that I was lookin' for
+It's hard to say it
+Time to say it
+Good bye, good bye, good bye</p>
+    </div>
+    <div class="project flex_item" id="project_3">
+      <h3 style="background-color:red">Project 3</h3>
+      <p>Remember the old arcade?
+Blew every dollar that we ever made
+The cops hated us hangin' out
+They said somebody went and burnt it down
+We use to listen to the radio
+And sing along with every song we know
+We said someday we'd find out how it feels
+To sing to more than just a steering wheel
+Kim's the first girl I kissed
+I was so nervous that I nearly missed
+She's had a couple of kids since then
+I haven't seen her since God knows when
+Oh, whoa, whoa, whoa, God, I</p>
+    </div>
   </div>
 </body>
 </html>
