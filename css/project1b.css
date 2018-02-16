@@ -33,9 +33,6 @@ section {
   border-color: #00;
   background-color: #D28CAF;
   color: #460024;
-  margin: 0 10px 0 10px;
-  padding: 0 10px 0 10px;
-  box-sizing: border-box;
 }
 
 a {
@@ -84,11 +81,15 @@ p {
 ============
 */
 
+.portrait {
+  text-align: right;
+}
+
 #project_1, #project_2, #project_3 {
   text-align: left;
 }
   
-@media (min-width: 992px) { /*sl*/
+@media (min-width: 768px) { /*md*/
   #project_1 {
     text-align: left;
   }
@@ -103,7 +104,7 @@ p {
 
 }
 
-  @media (min-width: 1200px){ /*md*/
+  @media (min-width: 992px){ /*lg*/
   #project_1 {
     text-align: left;
   }
