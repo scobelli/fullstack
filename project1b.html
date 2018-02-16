@@ -6,22 +6,49 @@
         href="https://fonts.googleapis.com/css?family=Dosis">
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Oswald">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet"
-        href="./css/style.css">
-  
+        href="./css/project1b.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 </head>
 <body>
   <header>
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">Navbar</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+  <div class="container">
+  <header>
     <h1>Web Portfolio</h1>
   </header>
   <section>
-    <article class="flex_container">
-      <div id="about_me">
+    <article class="row">
+      <div id="about_me" class="column col-sm-12 col-md-6 col-lg-6">
         <h2>Stefano Cobelli</h2>
         <p>Hi everybody! I am a senior at Bucknell University studying Computer Science and Engineering. I'm from a small town in Connecticut and I am looking for a career in software engineering. This page dedicated to my work done in my Full Stack class I am taking in Spring 2018. You can also find my <a href="https://github.com/scobelli">github here</a>. If you wish to contact me, you can reach me at <a href="mailto:sjc032@bucknell.edu">sjc032@bucknell.edu</a>. Thanks for stopping by and I hope you enjoy!</p>
       </div>
-      <div class="portrait">
+      <div class="portrait column col-sm-12 col-md-6 col-lg-6">
         <img id="mug" src="stef.png" alt="me!">
       </div>
     </article>
@@ -34,15 +61,14 @@
     <section>
       <h2>Sampled Coursework</h2>
       <p><a href="./fontfun.html">Font Fun!</a></p>
-      <p><a href="./project1b.html">Bootstrap!</a></p>
-
     </section>
   </div>
   <header>
     <h1>Projects</h1>
   </header>
-  <div class="flex_container">
-    <div  class="project flex_item " id="project_1">
+
+  <div class="row">
+    <div  class="column col-sm-12 col-md-6 col-lg-4" id="project_1">
       <h3 style="background-color:green">Project 1</h3>
       <p>Look at this photograph
 Every time I do it makes me laugh
@@ -57,7 +83,7 @@ Most of the time I had better things to do
 Criminal record says I broke in twice
 I must of done it half a dozen times</p>
     </div>
-    <div class="project flex_item" id="project_2">
+    <div class="column col-sm-12 col-md-6 col-lg-4" id="project_2">
       <h3 style="background-color:blue">Project 2</h3>
       <p>I wonder if it's too late
 Should I go back and try to graduate?
@@ -75,7 +101,7 @@ It's hard to say it
 Time to say it
 Good bye, good bye, good bye</p>
     </div>
-    <div class="project flex_item" id="project_3">
+    <div class="column col-sm-12 col-md-12 col-lg-4" id="project_3">
       <h3 style="background-color:red">Project 3</h3>
       <p>Remember the old arcade?
 Blew every dollar that we ever made
@@ -92,5 +118,6 @@ I haven't seen her since God knows when
 Oh, whoa, whoa, whoa, God, I</p>
     </div>
   </div>
+</div>
 </body>
 </html>
