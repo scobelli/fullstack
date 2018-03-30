@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Container, Col, Row} from 'reactstrap'
+import {Grid, Col, Row} from 'react-bootstrap'
 
 class OptionsSelect extends React.Component{
   constructor(props){
@@ -11,11 +11,14 @@ class OptionsSelect extends React.Component{
   }
   componentWillReceiveProps(newProps){
     if (newProps.options !== this.props.options){
-      var options = Array.from(new Set(this.props.options.map(course => {
-        return course.get(this.props.type);
-      })))
+      var options = null;
+      if (newProps.options !== null) {
+        options = Array.from(new Set(newProps.options.map(course => {
+          return course[this.props.type];
+        })))
+      }
       this.setState({options: options});
-}
+    }
   }
 
   handleSelection(event){
@@ -26,13 +29,14 @@ class OptionsSelect extends React.Component{
   }
   render(){
     var options;
-    if (this.state.options.length === 0) {
+    if (this.state.options.length === 0 || this.state.options[0] === undefined) {
       options = <option value="loading" key="loading">loading...</option>
     }
     else {
+      console.log(this.state.options);
       options = ['--select option--'].concat(this.state.options)
         .map(b =>
-            <option value={b} key={b}>{b}</option>
+            <option value={b._id} key={b._id}>{b[this.state.type]}</option>
           )
     }
     return (
@@ -87,7 +91,7 @@ class CourseOptionContainer extends React.Component{
       .then(result=>result.json())
       .then(res=>{
         this.setState({res:res.message})
-        this.props.onCourseChange(res)
+        this.props.onOptionsChange(res.message)
       })
       .catch(err=>console.log("Couldn't fetch courses", err))
   }
@@ -159,21 +163,16 @@ class CourseDetails extends React.Component{
           <p>{this.props.course.CCCReq}</p>
           <p>{this.props.course.CRN}</p>
           <p>{this.props.course.CCCReq}</p>
-          <p>{this.props.course.CCCReq}</p>
-          <p>{this.props.course.CCCReq}</p>
-          <p>{this.props.course.CCCReq}</p>
-          <p>{this.props.course.CCCReq}</p>
-          <p>{this.props.course.CCCReq}</p>
         </Col>
       )
     }
     return (
       <div>
-        <Container>
+        <Grid>
           <Row>
             {details}
           </Row>
-        </Container>
+        </Grid>
       </div>
     )
   }
@@ -184,6 +183,7 @@ class CourseView extends React.Component{
     super(props)
     // bind this to our event handler!
     this.state = {selectedCourse:null}
+    this.handleSelection = this.handleSelection.bind(this);
   }
 
   componentWillReceiveProps() {
@@ -192,18 +192,24 @@ class CourseView extends React.Component{
   handleSelection (event) {
     this.setState({selectedCourse: event.target.value})
   }
-  render(){
-    var courseBoxes = this.props.courses.map(
+  render() {
+    var courseBoxes;
+    if (this.props.courses === null) {
+      courseBoxes = (<p> Select Classes!</p>);
+    } else {
+      console.log(this.props.courses);
+      this.props.courses.map(
       course => <Col sm={6} md={3} value={course} onClick={this.handleSelection}>{course.Course}</Col>
-    )
+      )
+    }
     return (
     <div>
       <CourseDetails course={this.state.selectedCourse}> </CourseDetails>
-      <Container>
+      <Grid>
         <Row>
           {courseBoxes}
         </Row>
-      </Container>
+      </Grid>
     </div>
     )
   }
@@ -212,12 +218,19 @@ class CourseView extends React.Component{
 class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {courses: null}
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(courses) {
+    this.setState({courses: courses});
   }
 
   render() {
     return (
       <div className="App">
-        <CourseView/>
+	<CourseOptionContainer onOptionsChange={this.handleChange}/>
+        <CourseView courses={this.state.courses}/>
       </div>
     );
   }
