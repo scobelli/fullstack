@@ -1,115 +1,228 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {Container, Col, Row} from 'reactstrap'
 
-class OptionSelect extends React.Component{
+class OptionsSelect extends React.Component{
   constructor(props){
     super(props)
-    this.state = {selectedOption: [], years: [], semesters: [], departments: [],
-       CCC: [], index: {
-         year:0,
-         semester:1,
-         department:2,
-         CCC:3
-       }}
+    this.state = {selectedOption: "", options: []}
     this.handleSelection = this.handleSelection.bind(this)
   }
-  /*
-  componentWillMount(){
-    fetch('http://eg.bucknell.edu:48484/q?Semester=Fall&Year=2018&limit=50')
-      .then(result=>result.json())
-      .then(courses=>this.setState({courses:courses.message}))
-      .catch(err=>console.log("Couldn't fetch courses", err))
+  componentWillReceiveProps(newProps){
+    if (newProps.options !== this.props.options){
+      var options = Array.from(new Set(this.props.options.map(course => {
+        return course.get(this.props.type);
+      })))
+      this.setState({options: options});
+}
   }
-  */
-  handleSelection(selectionIndex, event){
-    console.log("Selction:", event.target.value)
-    console.log("attribute:" event.target.getAttribute)
-    this.setState({selectedOption[selectionIndex]:event.target.value})
+
+  handleSelection(event){
+    this.setState({selectedOption: event.target.value})
 
     // now also trigger the state update in the parent
-    this.props.onCourseChange(event.target.value)
+    this.props.onSelectionChange(this.state.type, event.target.value)
   }
   render(){
-    var options
-    if (this.state.breeds.length === 0)
+    var options;
+    if (this.state.options.length === 0) {
       options = <option value="loading" key="loading">loading...</option>
+    }
     else {
-      options = ['--select option--'].concat(this.state.breeds)
-        .map(b=>
+      options = ['--select option--'].concat(this.state.options)
+        .map(b =>
             <option value={b} key={b}>{b}</option>
           )
     }
     return (
       <div>
         <select onChange={this.handleSelection}>{options}</select>
-        { // if breed is selected, show it, else show a friendly message
-          (this.state.selectedBreed === null ||
-           this.state.selectedBreed === "--select breed--") ?
-            <p>Select something!</p> :
-            <p>Selected breed is <em>{this.state.selectedBreed}</em></p>
+        {
+          (this.state.selectedOption === null ||
+           this.state.selectedOption === "--select option--") ?
+            <p>Select Option!</p> :
+            <p>Selected option is <em>{this.state.selectedOption}</em></p>
         }
       </div>
     )
   }
 }
-class DogBreedDisplay extends React.Component {
-  constructor(props){
-    super(props)
-    // load a default placeholder when there is no do breed selected
-    this.placeholderurl = 'http://via.placeholder.com/350x350'
-    this.state = {imgurl: this.placeholderurl}
-  }
-  componentWillReceiveProps(newProps){
-    if (newProps.breed !== this.props.breed){
-      console.log("new breed recieved", newProps.breed)
-      //update the image.
-      fetch('https://dog.ceo/api/breed/' + newProps.breed + '/images/random')
-        .then(resp => resp.json())
-        .then(jresp => {
-          if (jresp.status === "success")
-            this.setState({imgurl:jresp.message})
-          else {
-            this.setState({imgurl:this.placeholderurl})
-          }
-        })
-        .catch(err => console.log("ERR:", err))
-    }
-  }
-  render(){
-    return <img src={this.state.imgurl}/>
-  }
-}
-class DogBreedImgSelect extends React.Component{
-  constructor(props){
-    super(props)
-    // bind this to our event handler!
-    this.state = {breed:null}
-    this.handleBreedChange = this.handleBreedChange.bind(this)
-  }
-  handleBreedChange(event){
-    console.log("breed changed!", event)
 
-    // this will trigger a render and pass the new breed into the props
-    // of DogBreedDisplay
-    this.setState({breed:event})
+class CourseOptionContainer extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      options: {}, res: {}, types:[
+      'department', 'instructor', 'ccceq']
+    }
+
+    this.optionsChange = this.optionsChange.bind(this);
   }
-  render(){
+
+  componentWillMount() {
+    this.fetchAPI()
+  }
+
+  formatQueryString(req) {
+    var queryString = "http://eg.bucknell.edu:48484/q?";
+    if (req.Department) {
+      queryString += "Department=" + req.department + "&"
+    }
+    if (req.Instructor) {
+      queryString += "Instructor=" + req.instructor + "&"
+    }
+    if (req.CCCReq) {
+      queryString += "CCCReq=" + req.CCCReq + "&"
+    }
+    if (req.text) { 
+      queryString += "text=" + req.text + "&"
+    }
+
+    return encodeURI(queryString)
+  }
+
+  fetchAPI() {
+    fetch(this.formatQueryString(this.state.options))
+      .then(result=>result.json())
+      .then(res=>{
+        this.setState({res:res.message})
+        this.props.onCourseChange(res)
+      })
+      .catch(err=>console.log("Couldn't fetch courses", err))
+  }
+
+  optionsChange(type, selectedOption) {
+    if (type === this.state.types[0]) {
+      this.setState(prevState => ({
+        options: {
+            ...prevState.options,
+            department: selectedOption
+        }
+      }))
+    }
+    else if (type === this.state.types[1]) {
+      this.setState(prevState => ({
+        options: {
+            ...prevState.options,
+            instructor: selectedOption
+        }
+      }))
+    }
+    else if (type === this.state.types[2]) {
+      this.setState(prevState => ({
+        options: {
+            ...prevState.options,
+            cccreq: selectedOption
+        }
+      }))
+    }
+    this.fetchAPI()
+  }
+
+  optionsReset() {
+    this.setState({options: {
+      department: '',
+      instructor: '',
+      cccreq: ''
+    }})
+    this.fetchAPI()
+  }
+
+  render() {
+    return (
+     <div>
+      <OptionsSelect type='this.state.types[0]' onSelectionChange={this.optionsChange} options={this.state.res}/>
+      <OptionsSelect type='this.state.types[1]' onSelectionChange={this.optionsChange} options={this.state.res}/>
+      <OptionsSelect type='this.state.types[2]' onSelectionChange={this.optionsChange} options={this.state.res}/>
+    </div>
+  )}
+
+}
+
+
+class CourseDetails extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+
+  render() {
+    var details
+    if (this.props.course === null) {
+
+    } else {
+      details = (
+        <Col>
+          <h1>{this.props.course.Course}</h1>
+          <p>{this.props.course.Instructor}</p>
+          <p>{this.props.course.CCCReq}</p>
+          <p>{this.props.course.CRN}</p>
+          <p>{this.props.course.CCCReq}</p>
+          <p>{this.props.course.CCCReq}</p>
+          <p>{this.props.course.CCCReq}</p>
+          <p>{this.props.course.CCCReq}</p>
+          <p>{this.props.course.CCCReq}</p>
+          <p>{this.props.course.CCCReq}</p>
+        </Col>
+      )
+    }
     return (
       <div>
-        <DogBreedsSelect onBreedChange={this.handleBreedChange}/>
-        <DogBreedDisplay breed={this.state.breed}/>
+        <Container>
+          <Row>
+            {details}
+          </Row>
+        </Container>
       </div>
     )
   }
 }
 
+class CourseView extends React.Component{
+  constructor(props){
+    super(props)
+    // bind this to our event handler!
+    this.state = {selectedCourse:null}
+  }
+
+  componentWillReceiveProps() {
+    this.setState({selectedCourse: null})
+  }
+  handleSelection (event) {
+    this.setState({selectedCourse: event.target.value})
+  }
+  render(){
+    var courseBoxes = this.props.courses.map(
+      course => <Col sm={6} md={3} value={course} onClick={this.handleSelection}>{course.Course}</Col>
+    )
+    return (
+    <div>
+      <CourseDetails course={this.state.selectedCourse}> </CourseDetails>
+      <Container>
+        <Row>
+          {courseBoxes}
+        </Row>
+      </Container>
+    </div>
+    )
+  }
+}
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <div className="App">
-
+        <CourseView/>
       </div>
     );
   }
 }
+
+
+
+export default App
