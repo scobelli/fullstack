@@ -1,47 +1,34 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {Grid, Col, Row} from 'react-bootstrap'
 
 class OptionsSelect extends React.Component{
   constructor(props){
     super(props)
-    this.state = {selectedOption: "", options: []}
+    this.state = {selectedOption: ""}
     this.handleSelection = this.handleSelection.bind(this)
-  }
-  componentWillReceiveProps(newProps){
-    if (newProps.options !== this.props.options){
-      var options = null;
-      if (newProps.options !== null) {
-        options = Array.from(new Set(newProps.options.map(course => {
-          return course[this.props.type];
-        })))
-      }
-      this.setState({options: options});
-    }
   }
 
   handleSelection(event){
     this.setState({selectedOption: event.target.value})
-
+    console.log("Onchange")
     // now also trigger the state update in the parent
-    this.props.onSelectionChange(this.state.type, event.target.value)
+    this.props.onSelectionChange(this.props.type, event.target.value)
   }
   render(){
     var options;
-    if (this.state.options.length === 0 || this.state.options[0] === undefined) {
+    if (this.props.options.length === 0 || this.props.options[0] === undefined) {
       options = <option value="loading" key="loading">loading...</option>
     }
     else {
-      console.log(this.state.options);
-      options = ['--select option--'].concat(this.state.options)
-        .map(b =>
-            <option value={b._id} key={b._id}>{b[this.state.type]}</option>
+      options = ["All"].concat(this.props.options)
+        .map((b, index) =>
+            <option value={b} key={index +1}>{b}</option>
           )
     }
     return (
       <div>
-        <select onChange={this.handleSelection}>{options}</select>
+        <select onChange={(e) => this.handleSelection(e)}>{options}</select>
         {
           (this.state.selectedOption === null ||
            this.state.selectedOption === "--select option--") ?
@@ -57,71 +44,64 @@ class CourseOptionContainer extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      options: {}, res: {}, types:[
-      'department', 'instructor', 'ccceq']
+      optionValues: [[""],[""],[""]],
+      options: {Department:"", Instructor:"", CCCReq:"", Text:""}, res: [], types:[
+      'Department', 'Instructor', 'CCCReq']
     }
 
     this.optionsChange = this.optionsChange.bind(this);
+    this.fetchAPI = this.fetchAPI.bind(this)
   }
 
   componentWillMount() {
-    this.fetchAPI()
+    this.fetchAPI(this.state.options)
   }
 
   formatQueryString(req) {
-    var queryString = "http://eg.bucknell.edu:48484/q?";
-    if (req.Department) {
-      queryString += "Department=" + req.department + "&"
+    var queryString = "http://eg.bucknell.edu:48484/q?limit=3345&";
+    for (let i = 0; i < this.state.types.length; i++) {
+      if (req[this.state.types[i]] !== "" && req[this.state.types[i]] !== "All") {
+        queryString += this.state.types[i] + "=" + req[this.state.types[i]] + "&"
+      }
     }
-    if (req.Instructor) {
-      queryString += "Instructor=" + req.instructor + "&"
-    }
-    if (req.CCCReq) {
-      queryString += "CCCReq=" + req.CCCReq + "&"
-    }
-    if (req.text) { 
-      queryString += "text=" + req.text + "&"
-    }
-
     return encodeURI(queryString)
   }
 
-  fetchAPI() {
-    fetch(this.formatQueryString(this.state.options))
+  fetchAPI(req) {
+    console.log(this.formatQueryString(req) + " was fetched")
+    fetch(this.formatQueryString(req))
       .then(result=>result.json())
       .then(res=>{
-        this.setState({res:res.message})
         this.props.onOptionsChange(res.message)
-      })
-      .catch(err=>console.log("Couldn't fetch courses", err))
+        res = res.message
+        var optionValues = [[""],[""],[""]];
+        if (res.length !== 0 || res[0] !== undefined) {
+          for (var i = 0; i < this.state.types.length; i++) {
+            if (this.state.options[this.state.types[i]] === "") {
+              optionValues[i] = Array.from(new Set(res.map((course, index) => {
+                if (i === 2) {
+                  return [].concat(...(course[this.state.types[i]]))
+                }
+                return course[this.state.types[i]];
+                })))
+            }
+            
+            else {
+              optionValues[i] = this.state.optionValues[i]
+            }
+            
+          }
+        }
+        console.log(req)
+        this.setState({optionValues: optionValues, options: req})
+      }).catch(e => console.log(e))
   }
-
+  
   optionsChange(type, selectedOption) {
-    if (type === this.state.types[0]) {
-      this.setState(prevState => ({
-        options: {
-            ...prevState.options,
-            department: selectedOption
-        }
-      }))
-    }
-    else if (type === this.state.types[1]) {
-      this.setState(prevState => ({
-        options: {
-            ...prevState.options,
-            instructor: selectedOption
-        }
-      }))
-    }
-    else if (type === this.state.types[2]) {
-      this.setState(prevState => ({
-        options: {
-            ...prevState.options,
-            cccreq: selectedOption
-        }
-      }))
-    }
-    this.fetchAPI()
+    var options = this.state.options;
+    options[type] = selectedOption;
+    console.log(type)
+    //this.fetchAPI(options)
   }
 
   optionsReset() {
@@ -129,16 +109,15 @@ class CourseOptionContainer extends React.Component{
       department: '',
       instructor: '',
       cccreq: ''
-    }})
-    this.fetchAPI()
+    }}, this.fetchAPI(this.state.options))
   }
 
   render() {
     return (
      <div>
-      <OptionsSelect type='this.state.types[0]' onSelectionChange={this.optionsChange} options={this.state.res}/>
-      <OptionsSelect type='this.state.types[1]' onSelectionChange={this.optionsChange} options={this.state.res}/>
-      <OptionsSelect type='this.state.types[2]' onSelectionChange={this.optionsChange} options={this.state.res}/>
+      <OptionsSelect type={this.state.types[0]} onSelectionChange={this.optionsChange} options={this.state.optionValues[0]}/>
+      <OptionsSelect type={this.state.types[1]} onSelectionChange={this.optionsChange} options={this.state.optionValues[1]}/>
+      <OptionsSelect type={this.state.types[2]} onSelectionChange={this.optionsChange} options={this.state.optionValues[2]}/>
     </div>
   )}
 
@@ -197,19 +176,23 @@ class CourseView extends React.Component{
     if (this.props.courses === null) {
       courseBoxes = (<p> Select Classes!</p>);
     } else {
-      console.log(this.props.courses);
-      this.props.courses.map(
-      course => <Col sm={6} md={3} value={course} onClick={this.handleSelection}>{course.Course}</Col>
+      courseBoxes = this.props.courses.map(
+        (course, index) => (<Col sm={6} md={3} lg={3} value={course} key={index} onClick={this.handleSelection}>{course.Course}</Col>)
       )
+
     }
     return (
     <div>
+      <div>
       <CourseDetails course={this.state.selectedCourse}> </CourseDetails>
+      </div>
+      <div>
       <Grid>
         <Row>
           {courseBoxes}
         </Row>
       </Grid>
+      </div>
     </div>
     )
   }
@@ -229,8 +212,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-	<CourseOptionContainer onOptionsChange={this.handleChange}/>
-        <CourseView courses={this.state.courses}/>
+	     <CourseOptionContainer onOptionsChange={this.handleChange}/>
+       <CourseView courses={this.state.courses}/>
       </div>
     );
   }
