@@ -59,7 +59,7 @@ class CourseOptionContainer extends React.Component{
   }
 
   formatQueryString(req) {
-    var queryString = "http://eg.bucknell.edu:48484/q?limit=3345&";
+    var queryString = "https://eg.bucknell.edu:48484/q?limit=3345&";
     for (let i = 0; i < this.state.types.length; i++) {
       if (req[this.state.types[i]] !== "" && req[this.state.types[i]] !== "All") {
         queryString += this.state.types[i] + "=" + req[this.state.types[i]] + "&"
