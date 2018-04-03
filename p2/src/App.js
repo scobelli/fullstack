@@ -13,6 +13,7 @@ class OptionsSelect extends React.Component{
     this.setState({selectedOption: event.target.value})
     console.log("Onchange")
     // now also trigger the state update in the parent
+    event.preventUpdate = true;
     this.props.onSelectionChange(this.props.type, event.target.value)
   }
   render(){
@@ -85,11 +86,9 @@ class CourseOptionContainer extends React.Component{
                 return course[this.state.types[i]];
                 })))
             }
-            
             else {
               optionValues[i] = this.state.optionValues[i]
             }
-            
           }
         }
         console.log(req)
@@ -101,7 +100,7 @@ class CourseOptionContainer extends React.Component{
     var options = this.state.options;
     options[type] = selectedOption;
     console.log(type)
-    //this.fetchAPI(options)
+    this.fetchAPI(options)
   }
 
   optionsReset() {
