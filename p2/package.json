@@ -14,5 +14,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://scobelli.github.io/p2/release/v0.1.0"
+  "homepage": "https://scobelli.github.io/fullstack/p2/release/v0.1.0"
 }
